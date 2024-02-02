@@ -24,6 +24,7 @@
   padding: 36px;
   height: 693px;
   box-sizing: border-box;
+  overflow-x: scroll;
 }
 
 .returnButton {

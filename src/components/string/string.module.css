@@ -1,0 +1,34 @@
+.contentBox {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 120px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-width: 567px;
+}
+
+.stringInput {
+  max-width: 377px;
+}
+
+.buttonInput {
+  max-width: 178px;
+}
+
+
+
+.circleContainer {
+  display: flex;
+  justify-content: center;
+  column-gap: 16px;
+  row-gap: 16px;
+  flex-wrap: wrap;
+}
