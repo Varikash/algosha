@@ -18,6 +18,8 @@ export const StringComponent: React.FC = () => {
 
   const [string, setString] = useState<string>("")
   const [stringArray, setArray] = useState<StringElement[]>([]);
+  const [calmState, setState] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState<boolean>(false);
   
 
   const swap = (arr: StringElement[], firstIndex: number, secondIndex: number) => {
@@ -25,6 +27,7 @@ export const StringComponent: React.FC = () => {
   };
   
   const swapStrings = async (arr: StringElement[]) => {
+    setLoading(true);
     let length = arr.length - 1;
     let half = Math.floor(length / 2);
   
@@ -51,11 +54,15 @@ export const StringComponent: React.FC = () => {
       arr[half].state = ElementStates.Modified;
       setArray([...arr]);
     }
+
+    setLoading(false);
+    setState(true);
   };
   
 
   const handleChage = (event: ChangeEvent<HTMLInputElement>) => {
     setString(event.target.value);
+    setState(false);
   }
 
   const handleSubmit = async (event: FormEvent) => {
@@ -75,7 +82,7 @@ export const StringComponent: React.FC = () => {
       <section className={Style.contentBox}>
         <form onSubmit={handleSubmit} className={Style.inputContainer}>
         <Input type="text" maxLength={11} isLimitText={true} extraClass={Style.stringInput} onChange={handleChage} value={string}/>
-        <Button extraClass={Style.buttonInput} text="Развернуть" type="submit"/>
+        <Button extraClass={Style.buttonInput} text="Развернуть" type="submit" disabled={calmState} isLoader={isLoading}/>
         </form>
         <div className={Style.circleContainer}>
         {stringArray.map((element, index) => (
