@@ -26,7 +26,7 @@ export const SortingPage: React.FC = () => {
     arr[secondIndex] = temp;
   };
   
-  const selectionSort = (arr: number[], direction: Direction): void => {
+  const selectionSort = async (arr: number[], direction: Direction): Promise<void> => {
     const length = arr.length;
     for (let i = 0; i < length - 1; i++) {
       let extremeInd = i;
@@ -36,16 +36,20 @@ export const SortingPage: React.FC = () => {
         }
       }
       if (i !== extremeInd) {
-        swap(arr, i, extremeInd);;
+        swap(arr, i, extremeInd);
+        await delayExecution(DELAY_IN_MS);
+        setArrayForRender([...arr]);
       }
     }
   };
 
-  const bubbleSort = (arr: number[], direction: Direction): void => {
+  const bubbleSort = async (arr: number[], direction: Direction): Promise<void> => {
     for (let i = 0; i < arr.length - 1; i++){
       for (let j = 0; j < arr.length - 1 - i; j++) {
         if (direction === Direction.Ascending ? arr[j] > arr[j+1] : arr[j] < arr[j+1]) {
           swap(arr, j, j+1);
+          await delayExecution(DELAY_IN_MS);
+          setArrayForRender([...arr])
         }
       }
     }
