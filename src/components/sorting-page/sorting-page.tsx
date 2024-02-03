@@ -19,6 +19,8 @@ export const SortingPage: React.FC = () => {
   const [arrayForRender, setArrayForRender] = useState<number[]>([]);
   const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.Selection);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [elementStates, setElementStates] = useState<ElementStates[]>(new Array(arrayForRender.length).fill(ElementStates.Default));
+
 
   const swap = (arr: number[], firstIndex: number, secondIndex: number): void => {
     const temp = arr[firstIndex];
@@ -119,6 +121,7 @@ export const SortingPage: React.FC = () => {
             <Column
               key={index}
               index={element}
+              
             />
           ))}
         </div>
