@@ -14,7 +14,6 @@ enum SortMethod {
 
 export const SortingPage: React.FC = () => {
   const [arrayForRender, setArrayForRender] = useState<number[]>([]);
-  const [directionSort, setDirection] = useState<Direction>(Direction.Ascending);
   const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.Selection)
 
   const swap = (arr: number[], firstIndex: number, secondIndex: number): void => {
@@ -23,7 +22,7 @@ export const SortingPage: React.FC = () => {
     arr[secondIndex] = temp;
   };
   
-  const selectionSort = (arr: number[], direction: Direction = directionSort): void => {
+  const selectionSort = (arr: number[], direction: Direction): void => {
     const length = arr.length;
     for (let i = 0; i < length - 1; i++) {
       let extremeInd = i;
@@ -38,7 +37,7 @@ export const SortingPage: React.FC = () => {
     }
   };
 
-  const bubbleSort = (arr: number[], direction: Direction = directionSort): void => {
+  const bubbleSort = (arr: number[], direction: Direction): void => {
     for (let i = 0; i < arr.length - 1; i++){
       for (let j = 0; j < arr.length - 1 - i; j++) {
         if (direction === Direction.Ascending ? arr[j] > arr[j+1] : arr[j] < arr[j+1]) {
@@ -53,19 +52,21 @@ export const SortingPage: React.FC = () => {
     setArrayForRender(Array.from({length: len}, () => Math.floor(Math.random() * 100)));
   }
 
-  const sortArray = (): void => {
+  const handleSort = (direction: Direction): void => {
+    const newArray = [...arrayForRender];
     if (sortMethod === SortMethod.Selection) {
-      selectionSort(arrayForRender, directionSort);
+      selectionSort(newArray, direction);
     } else if (sortMethod === SortMethod.Bubble) {
-      bubbleSort(arrayForRender, directionSort);
+      bubbleSort(newArray, direction);
     }
+    setArrayForRender(newArray);
   }
 
   useEffect(() => {
     randomArray();
   }, []);
 
-
+  
   return (
     <SolutionLayout title="Сортировка массива">
       <section className={Style.contentBox}>
@@ -87,19 +88,13 @@ export const SortingPage: React.FC = () => {
               text="По возрастанию"
               type = "button"
               sorting={Direction.Ascending}
-              onClick={() => {
-                setDirection(Direction.Ascending);
-                sortArray();
-              }}
+              onClick={() => handleSort(Direction.Ascending)}
             />
             <Button 
               text="По убыванию"
               type = "button"
               sorting={Direction.Descending}
-              onClick={() => {
-                setDirection(Direction.Descending);
-                sortArray();
-              }}
+              onClick={() => handleSort(Direction.Descending)}
             />
           </div>
             <Button 
