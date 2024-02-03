@@ -5,6 +5,9 @@ import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
 import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
+import { ElementStates } from "../../types/element-states";
+import { delayExecution } from "../../constants/utils";
+import { DELAY_IN_MS } from "../../constants/delays";
 
 
 enum SortMethod {
@@ -14,7 +17,8 @@ enum SortMethod {
 
 export const SortingPage: React.FC = () => {
   const [arrayForRender, setArrayForRender] = useState<number[]>([]);
-  const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.Selection)
+  const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.Selection);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const swap = (arr: number[], firstIndex: number, secondIndex: number): void => {
     const temp = arr[firstIndex];
@@ -89,20 +93,21 @@ export const SortingPage: React.FC = () => {
               type = "button"
               sorting={Direction.Ascending}
               onClick={() => handleSort(Direction.Ascending)}
+              isLoader={isLoading}
             />
             <Button 
               text="По убыванию"
               type = "button"
               sorting={Direction.Descending}
               onClick={() => handleSort(Direction.Descending)}
+              isLoader={isLoading}
             />
           </div>
             <Button 
               text="Новый массив"
               type = "button"
-              onClick={() => {
-                randomArray();
-              }}
+              onClick={() => randomArray()}
+              isLoader={isLoading}
             />
         </form>
         <div className={Style.columnBox}>
