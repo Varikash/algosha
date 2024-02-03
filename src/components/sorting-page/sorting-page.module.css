@@ -1,5 +1,37 @@
 .contentBox {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   row-gap: 48px;
+}
+
+.form {
+  display: flex;
+  margin: 0 auto;
+  column-gap: 52px;
+}
+
+.radioButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 40px;
+}
+
+.sortingDirection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 12px;
+  margin-right: 28px;
+}
+
+.columnBox {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  gap: 10px;
+  align-items: end;
+  justify-content: center;
 }
