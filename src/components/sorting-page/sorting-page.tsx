@@ -55,7 +55,7 @@ const bubbleSort = async (
   }
 };
 
-const SortingPage: React.FC = () => {
+export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<ArrayElement[]>(randomArr(3, 17, 100).map(value => ({ value, state: ElementStates.Default })));
   const [direction, setDirection] = useState<Direction>(Direction.Ascending);
 
@@ -88,5 +88,3 @@ const SortingPage: React.FC = () => {
     </SolutionLayout>
   );
 };
-
-export default SortingPage;
