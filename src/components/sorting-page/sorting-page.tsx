@@ -1,131 +1,92 @@
-import React, { useEffect, useState } from "react";
-import Style from "./sorting-page.module.css"
+import React, { useState } from "react";
+import { Direction } from "../../types/direction"; 
+import { ElementStates } from "../../types/element-states"; 
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
-import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
-import { ElementStates } from "../../types/element-states";
 import { delayExecution } from "../../constants/utils";
-import { DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import styles from "./sorting-page.module.css";
 
+// Утилиты
+const randomArr = (min: number, max: number, maxNumber: number): number[] =>
+  Array.from({ length: Math.floor(Math.random() * (max - min + 1) + min) }, () => Math.floor(Math.random() * (maxNumber + 1)));
 
-enum SortMethod {
-  Selection = 'SELECTION',
-  Bubble = 'BUBBLE'
+const swap = (array: ArrayElement[], firstIndex: number, secondIndex: number): void => {
+  [array[firstIndex], array[secondIndex]] = [array[secondIndex], array[firstIndex]];
+};
+
+const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+
+const compareArrayItems = (direction: Direction, array: number[], firstIndex: number, secondIndex: number): boolean =>
+  direction === Direction.Ascending ? array[firstIndex] > array[secondIndex] : array[firstIndex] < array[secondIndex];
+
+const DELAY_IN_MS = 300;
+
+interface ArrayElement {
+  value: number;
+  state: ElementStates;
 }
 
-export const SortingPage: React.FC = () => {
-  const [arrayForRender, setArrayForRender] = useState<number[]>([]);
-  const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.Selection);
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [elementStates, setElementStates] = useState<ElementStates[]>(new Array(arrayForRender.length).fill(ElementStates.Default));
+// Функции сортировки
+const bubbleSort = async (
+  array: ArrayElement[],
+  direction: Direction,
+  setArrayState: React.Dispatch<React.SetStateAction<ArrayElement[]>>
+): Promise<void> => {
+  let n = array.length;
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - i - 1; j++) {
+      array[j].state = ElementStates.Changing;
+      array[j + 1].state = ElementStates.Changing;
+      setArrayState(array.slice());
+      await delay(DELAY_IN_MS);
 
+      if (compareArrayItems(direction, array.map(a => a.value), j, j + 1)) {
+        swap(array, j, j + 1);
+      }
 
-  const swap = (arr: number[], firstIndex: number, secondIndex: number): void => {
-    const temp = arr[firstIndex];
-    arr[firstIndex] = arr[secondIndex];
-    arr[secondIndex] = temp;
+      array[j].state = ElementStates.Default;
+      array[j + 1].state = ElementStates.Default;
+    }
+    array[n - i - 1].state = ElementStates.Modified;
+    setArrayState(array.slice());
+  }
+};
+
+const SortingPage: React.FC = () => {
+  const [array, setArray] = useState<ArrayElement[]>(randomArr(3, 17, 100).map(value => ({ value, state: ElementStates.Default })));
+  const [direction, setDirection] = useState<Direction>(Direction.Ascending);
+
+  const handleSort = async () => {
+    await bubbleSort([...array], direction, setArray);
   };
-  
-  const selectionSort = async (arr: number[], direction: Direction): Promise<void> => {
-    const length = arr.length;
-    for (let i = 0; i < length - 1; i++) {
-      let extremeInd = i;
-      for (let j = i + 1; j < length; j++) {
-        if (direction === Direction.Ascending? arr[j] < arr[extremeInd] : arr[j] > arr[extremeInd]) {
-          extremeInd = j;
-        }
-      }
-      if (i !== extremeInd) {
-        swap(arr, i, extremeInd);
-        await delayExecution(DELAY_IN_MS);
-        setArrayForRender([...arr]);
-      }
-    }
-  };
 
-  const bubbleSort = async (arr: number[], direction: Direction): Promise<void> => {
-    for (let i = 0; i < arr.length - 1; i++){
-      for (let j = 0; j < arr.length - 1 - i; j++) {
-        if (direction === Direction.Ascending ? arr[j] > arr[j+1] : arr[j] < arr[j+1]) {
-          swap(arr, j, j+1);
-          await delayExecution(DELAY_IN_MS);
-          setArrayForRender([...arr])
-        }
-      }
-    }
-  }
-
-  const randomArray = (minLen = 3, maxLen = 17):void => {
-    const len = Math.floor(Math.random() * (maxLen  - minLen + 1)) + minLen;
-    setArrayForRender(Array.from({length: len}, () => Math.floor(Math.random() * 100)));
-  }
-
-  const handleSort = (direction: Direction): void => {
-    const newArray = [...arrayForRender];
-    if (sortMethod === SortMethod.Selection) {
-      selectionSort(newArray, direction);
-    } else if (sortMethod === SortMethod.Bubble) {
-      bubbleSort(newArray, direction);
-    }
-    setArrayForRender(newArray);
-  }
-
-  useEffect(() => {
-    randomArray();
-  }, []);
-
-  
   return (
     <SolutionLayout title="Сортировка массива">
-      <section className={Style.contentBox}>
-        <form className={Style.form}>
-          <div className={Style.radioButtons}>
-            <RadioInput 
-              label="Выбор"
-              checked={sortMethod === SortMethod.Selection}
-              onChange={() => setSortMethod(SortMethod.Selection)}
-            />
-            <RadioInput 
-              label="Пузырёк"
-              checked={sortMethod === SortMethod.Bubble}
-              onChange={() => setSortMethod(SortMethod.Bubble)}
-            />
-          </div>
-          <div className={Style.sortingDirection}>
-            <Button 
-              text="По возрастанию"
-              type = "button"
-              sorting={Direction.Ascending}
-              onClick={() => handleSort(Direction.Ascending)}
-              isLoader={isLoading}
-            />
-            <Button 
-              text="По убыванию"
-              type = "button"
-              sorting={Direction.Descending}
-              onClick={() => handleSort(Direction.Descending)}
-              isLoader={isLoading}
-            />
-          </div>
-            <Button 
-              text="Новый массив"
-              type = "button"
-              onClick={() => randomArray()}
-              isLoader={isLoading}
-            />
-        </form>
-        <div className={Style.columnBox}>
-          {arrayForRender.map((element, index) => (
-            <Column
-              key={index}
-              index={element}
-              
-            />
-          ))}
-        </div>
-      </section>
+      <div className={styles.controls}>
+        <RadioInput 
+          label="По возрастанию" 
+          name="direction" 
+          checked={direction === Direction.Ascending} 
+          onChange={() => setDirection(Direction.Ascending)} 
+        />
+        <RadioInput 
+          label="По убыванию" 
+          name="direction" 
+          checked={direction === Direction.Descending} 
+          onChange={() => setDirection(Direction.Descending)} 
+        />
+        <Button text="Сортировать" onClick={handleSort} />
+      </div>
+      <div className={styles.array}>
+        {array.map((element, index) => (
+          <Column key={index} index={element.value} state={element.state} />
+        ))}
+      </div>
     </SolutionLayout>
   );
 };
+
+export default SortingPage;
