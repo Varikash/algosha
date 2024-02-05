@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-right: 80px;
+}
+
+.input {
+  width: 377px;
+}
+
+.list {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
