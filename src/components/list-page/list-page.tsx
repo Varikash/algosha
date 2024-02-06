@@ -1,330 +1,329 @@
-import React, { FormEvent, useMemo, useState } from "react";
+import React, { ChangeEvent, FormEventHandler, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import Style from "./list-page.module.css";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
-import { LinkedList } from "./linkedList";
+import styles from "./list-page.module.css";
 import { Circle } from "../ui/circle/circle";
-import { ElementStates } from "../../types/element-states";
-import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { delayExecution } from "../../constants/utils";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { ElementStates } from "../../types/element-states";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
+import { LinkedList } from "./LinkedList";
 
-type Circle = {
-  item: string;
-  state: ElementStates;
-}
-
-enum position {
-  head = "head",
-  tail = "tail",
-}
-
-enum ElementColors {
-  Default = "#0032ff",
-  Changing = "#d252e1",
-  Modified = "#7fe051",
-}
+export const randomArr = (min: number, max: number, maxNumber: number) => {
+  const randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
+  return Array(randomNumber)
+    .fill(0)
+    .map(() => {
+      const num = Math.floor(Math.random() * (maxNumber + 1));
+      return num;
+    });
+};
 
 export const ListPage: React.FC = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [indexInput, setIndexInput] = useState("");
-  const [indexValueInput, setIndexValueInput] = useState<number>();
-  const [isActiveState, setActiveState] = useState(false);
-  const [isPrepending, setIsPrepending] = useState(false);
-  const [isAppending, setIsAppending] = useState(false);
-  const [isRemovingFromHead, setIsRemovingFromHead] = useState(false);
-  const [isRemovingFromTail, setIsRemovingFromTail] = useState(false);
-  const [isInsertByIndex, setIsInsertByIndex] = useState(false);
-  const [isRemoveByIndex, setIsRemoveByIndex] = useState(false);
-  const [temporaryValue, setTemporaryValue] = useState("");
-
-  const initialValues = useMemo(() => ["0", "34", "8", "1"], []);
-  const list = useMemo(
-    () => new LinkedList<string>(initialValues),
-    [initialValues]
+  const [linkedList] = useState(
+    () =>
+      new LinkedList<string>(
+        randomArr(4, 6, 100).map((item) => item.toString())
+      )
   );
-  const [arrayWithState, setArrayWithState] = useState<Circle[]>(
-    list.getArrayWithState()
-  );
+  const [inputValue, setInputValue] = useState<string>("");
+  const [inputIndex, setInputIndex] = useState<number>(-1); //TODO неконтролируемый инпут, строка?
+  const [dataForVisualization, setDataForVisualization] = useState<
+    Array<string>
+  >([...linkedList]);
+  const [modifiedItem, setModifiedItem] = useState<number | null>(null);
+  const [head, setHead] = useState<"head" | React.ReactElement | null>("head");
+  const [tail, setTail] = useState<React.ReactElement | null>(null);
+  const [insertItem, setInsertItem] = useState<number | null>(0);
+  const [deletedItem, setDeletedItem] = useState<number | null>(null);
+  const [deleteByIndex, setDeleteByIndex] = useState<boolean>(false);
+  const [currentAnimation, setCurrentAnimation] = useState<
+    | "prepend"
+    | "append"
+    | "addByIndex"
+    | "deleteByIndex"
+    | "deleteHead"
+    | "deleteTail"
+    | null
+  >(null);
+  const lastIndexDataForVisualization = dataForVisualization.length - 1;
 
-  const handleInputValChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.currentTarget.value;
-    value = value.replace(/\D/g, ''); // Удаляем все символы, кроме цифр
-    setInputValue(value);
-  };
-
-  const handleInputIdxChange = (e: FormEvent<HTMLInputElement>) => {
-    let value = e.currentTarget.value;
-    if (!isNaN(Number(value)) && Number(value) >= 0) {
-      setIndexInput(value);
-    }
-  };
-
-  const prepend = async () => {
-    if (inputValue) {
-      setActiveState(true);
-      setIsPrepending(true);
-      setIndexValueInput(0);
-      await delayExecution(SHORT_DELAY_IN_MS);
-
-      list.prepend(inputValue);
-      setIsPrepending(false);
-      const arrayWithState = list.getArrayWithState();
-      arrayWithState[0].state = ElementStates.Modified;
-      setArrayWithState(arrayWithState);
-
-      await delayExecution(SHORT_DELAY_IN_MS);
-
-      arrayWithState[0].state = ElementStates.Default;
-      setArrayWithState(arrayWithState);
-
-      setInputValue("");
-      setActiveState(false);
-    }
-  };
-
-  const append = async () => {
-    if (inputValue) {
-      setActiveState(true);
-      setIsAppending(true);
-      setIndexValueInput(list.getSize - 1);
-      await delayExecution(SHORT_DELAY_IN_MS);
-
-      list.append(inputValue);
-      setIsAppending(false);
-      const arrayWithState = list.getArrayWithState();
-      arrayWithState[arrayWithState.length - 1].state = ElementStates.Modified;
-      setArrayWithState(arrayWithState);
-      await delayExecution(SHORT_DELAY_IN_MS);
-
-      arrayWithState[arrayWithState.length - 1].state = ElementStates.Default;
-      setArrayWithState(arrayWithState);
-    }
+  const submitPrepend: FormEventHandler = async (e) => {
+    e.preventDefault();
+    if (inputValue === "") return;
+    setCurrentAnimation("prepend");
+    linkedList.prepend(inputValue);
+    setInsertItem(0);
+    setHead(
+      <Circle
+        isSmall={true}
+        letter={inputValue}
+        state={ElementStates.Changing}
+      />
+    );
+    await delayExecution(SHORT_DELAY_IN_MS);
+    setDataForVisualization([...linkedList]);
+    setModifiedItem(0);
+    setHead("head");
+    await delayExecution(SHORT_DELAY_IN_MS);
+    setModifiedItem(null);
     setInputValue("");
-    setActiveState(false);
+    setCurrentAnimation(null);
   };
 
-  const shift = async () => {
-    if (list.getSize) {
-      const arrayWithState = list.getArrayWithState();
-      setActiveState(true);
-      setIsRemovingFromHead(true);
-      setIndexValueInput(0);
-      arrayWithState[0].item = "";
-      setArrayWithState(arrayWithState);
+  const submitAddByIndex: FormEventHandler = async (e) => {
+    e.preventDefault();
+    if (inputValue === "" || inputIndex === -1) return;
+    setCurrentAnimation("addByIndex");
+    linkedList.addByIndex(inputValue, inputIndex);
+    setHead(
+      <Circle
+        isSmall={true}
+        letter={inputValue}
+        state={ElementStates.Changing}
+        extraClass="smallCircle"
+      />
+    );
+
+    for (let i = 0; i <= inputIndex; i++) {
+      setInsertItem(i);
       await delayExecution(SHORT_DELAY_IN_MS);
-      list.shift();
-      setIsRemovingFromHead(false);
-      setArrayWithState(list.getArrayWithState());
     }
-    setActiveState(false);
-  };
 
-  const pop = async () => {
-    if (list.getSize) {
-      const arrayWithState = list.getArrayWithState();
-      setTemporaryValue(arrayWithState[arrayWithState.length - 1].item);
-      setActiveState(true);
-      setIsRemovingFromTail(true);
-      setIndexValueInput(list.getSize - 1);
-
-      arrayWithState[arrayWithState.length - 1].item = "";
-      setArrayWithState(arrayWithState);
-      await delayExecution(SHORT_DELAY_IN_MS);
-
-      list.pop();
-      setIsRemovingFromTail(false);
-      setArrayWithState(list.getArrayWithState());
-    }
-    setActiveState(false);
-  };
-
-  const addByIndex = async () => {
-    const numericIdx = parseInt(indexInput);
-    if (numericIdx < 0 || numericIdx > list.getSize - 1) {
-      return; // индекс невалидный, кнопка должна быть неактивной
-    }
-    setActiveState(true);
-    setIsInsertByIndex(true);
-
-    const arrayWithState = list.getArrayWithState();
-    for (let i = 0; i < numericIdx; i++) {
-      setIndexValueInput(i);
-      await delayExecution(SHORT_DELAY_IN_MS);
-      if (i < numericIdx) {
-        arrayWithState[i].state = ElementStates.Changing;
-        setArrayWithState(arrayWithState);
-      }
-    }
-    setIsInsertByIndex(false);
-    setIndexValueInput(parseInt(""));
-    list.insertByIndex(inputValue, numericIdx);
-    const newArrayWithState = list.getArrayWithState();
-    newArrayWithState[numericIdx].state = ElementStates.Modified;
-
-    setArrayWithState(newArrayWithState);
+    setHead(null);
+    setDataForVisualization([...linkedList]);
+    setModifiedItem(inputIndex);
     await delayExecution(SHORT_DELAY_IN_MS);
-    newArrayWithState[numericIdx].state = ElementStates.Default;
-    setArrayWithState(newArrayWithState);
-
-    setActiveState(false);
+    setModifiedItem(null);
     setInputValue("");
-    setIndexInput("");
+    setInputIndex(-1);
+    setCurrentAnimation(null);
   };
 
-  const removeByIndex = async () => {
-    const numericIdx = parseInt(indexInput);
-    if (numericIdx < 0 || numericIdx > list.getSize - 1) {
-      return;  // индекс невалидный, кнопка должна быть неактивной
-    }
-
-    setActiveState(true);
-    const arrayWithState = list.getArrayWithState();
-    for (let i = 0; i < numericIdx; i++) {
-      await delayExecution(SHORT_DELAY_IN_MS);
-      arrayWithState[i].state = ElementStates.Changing;
-      setArrayWithState([...arrayWithState]);
-    }
-    await delayExecution(SHORT_DELAY_IN_MS);
-    setTemporaryValue(arrayWithState[numericIdx].item);
-    arrayWithState[numericIdx].item = "";
-    setIsRemoveByIndex(true);
-    arrayWithState[numericIdx].state = ElementStates.Default;
-    setIndexValueInput(numericIdx);
-
-    await delayExecution(SHORT_DELAY_IN_MS);
-    list.removeByIndex(numericIdx);
-    setArrayWithState(list.getArrayWithState());
-    setIsRemoveByIndex(false);
-    setActiveState(false);
-    setIndexInput("");
-  };
-
-  const showHead = (index: number): string => {
-    if (index === 0 && (!isPrepending || !isInsertByIndex)) {
-      return position.head;
-    } else if (index === 0 && isInsertByIndex && indexValueInput !== 0) {
-      return position.head;
-    }
-    return "";
-  };
-  const showTail = (index: number): string => {
+  const getState = (index: number) => {
     if (
-      index === arrayWithState.length - 1 &&
-      (!isRemovingFromTail || !isRemoveByIndex)
+      (insertItem !== null && index < insertItem && inputIndex > -1) ||
+      (deletedItem !== null && index <= deletedItem && deleteByIndex)
     ) {
-      return position.tail;
-    } else if (index === arrayWithState.length - 1 && isRemoveByIndex) {
-      return position.tail;
-    } else if (arrayWithState.length === 1) {
-      return "";
+      return ElementStates.Changing;
+    } else if (index === modifiedItem) {
+      return ElementStates.Modified;
+    } else {
+      return ElementStates.Default;
     }
-    return "";
   };
 
   return (
     <SolutionLayout title="Связный список">
-      <form className={Style.form}>
-        <div className={Style.container}>
-          <Input
-            value={inputValue}
-            onChange={handleInputValChange}
-            extraClass={Style.input}
-            isLimitText={true}
-            maxLength={4}
-            placeholder={"Введите значение"}
-          />
-          <Button
-            text="Добавить в head"
-            onClick={prepend}
-            disabled={!inputValue}
-            isLoader={isPrepending}
-          />
-          <Button
-            text="Добавить в tail"
-            onClick={append}
-            disabled={!inputValue}
-            isLoader={isAppending}
-          />
-          <Button
-            text="Удалить из head"
-            onClick={shift}
-            disabled={!list.getSize}
-            isLoader={isRemovingFromHead}
-          />
-          <Button
-            text="Удалить из tail"
-            onClick={pop}
-            disabled={!list.getSize}
-            isLoader={isRemovingFromTail}
-          />
-        </div>
-        <div className={Style.container}>
-          <Input
-            value={indexInput}
-            onChange={handleInputIdxChange}
-            extraClass={Style.input}
-            placeholder={"Введите индекс"}
-            type="number"
-          />
-          <Button
-            text="Добавить по индексу"
-            extraClass={Style.btn}
-            onClick={addByIndex}
-            disabled={!indexInput || parseInt(indexInput) > list.getSize - 1}
-            isLoader={isInsertByIndex}
-          />
-          <Button
-            text="Удалить по индексу"
-            extraClass={Style.btn}
-            onClick={removeByIndex}
-            disabled={!indexInput || parseInt(indexInput) > list.getSize - 1}
-            isLoader={isRemoveByIndex}
-          />
-        </div>
-
-        <ul className={Style.list}>
-          {arrayWithState.map((item, index) => (
-            <li key={index} className={Style.list__item}>
-              {isActiveState &&
-                (isPrepending || isAppending || isInsertByIndex) &&
-                index === indexValueInput && (
+        <div className={styles.contentBox}>
+          <form
+            className={styles.form}
+            onSubmit={submitPrepend}
+            data-cy="formValue"
+          >
+            <Input
+              extraClass={styles.input}
+              placeholder="Введите значение"
+              maxLength={4}
+              value={inputValue}
+              type="text"
+              isLimitText={true}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setInputValue(e.target.value);
+              }}
+              data-cy="inputValue"
+            />
+            <Button
+              text="Добавить в head"
+              type="submit"
+              disabled={inputValue === "" || currentAnimation !== null}
+              linkedList="small"
+              isLoader={currentAnimation === "prepend"}
+              data-cy="addButtonHead"
+            />
+            <Button
+              text="Добавить в tail"
+              type="button"
+              disabled={inputValue === "" || currentAnimation !== null}
+              isLoader={currentAnimation === "append"}
+              linkedList="small"
+              onClick={async () => {
+                setCurrentAnimation("append");
+                linkedList.append(inputValue);
+                setInsertItem(lastIndexDataForVisualization);
+                setHead(
                   <Circle
                     isSmall={true}
-                    extraClass={Style.small__top}
                     letter={inputValue}
                     state={ElementStates.Changing}
                   />
-                )}
-
-              {isActiveState &&
-                (isRemovingFromHead || isRemovingFromTail || isRemoveByIndex) &&
-                index === indexValueInput && (
+                );
+                await delayExecution(SHORT_DELAY_IN_MS);
+                setHead(null);
+                setDataForVisualization([...linkedList]);
+                setModifiedItem(lastIndexDataForVisualization + 1);
+                await delayExecution(SHORT_DELAY_IN_MS);
+                setModifiedItem(null);
+                setInsertItem(null);
+                setInputValue("");
+                setCurrentAnimation(null);
+              }}
+              data-cy="addButtonTail"
+            />
+            <Button
+              text="Удалить из head"
+              type="button"
+              disabled={
+                dataForVisualization.length === 0 || currentAnimation !== null
+              }
+              isLoader={currentAnimation === "deleteHead"}
+              linkedList="small"
+              onClick={async () => {
+                setCurrentAnimation("deleteHead");
+                setDeletedItem(0);
+                setDataForVisualization(["", ...[...linkedList].slice(1)]);
+                setTail(
                   <Circle
                     isSmall={true}
-                    extraClass={Style.small__bottom}
-                    letter={temporaryValue}
+                    letter={[...linkedList][0]}
                     state={ElementStates.Changing}
+                    extraClass="smallCircle"
                   />
-                )}
-
-              <Circle
-                index={index}
-                head={isPrepending || isInsertByIndex ? "" : showHead(index)}
-                tail={
-                  isRemovingFromTail || isRemoveByIndex ? "" : showTail(index)
+                );
+                await delayExecution(SHORT_DELAY_IN_MS);
+                setDeletedItem(null);
+                setTail(null);
+                linkedList.deleteHead();
+                setDataForVisualization([...linkedList]);
+                setCurrentAnimation(null);
+              }}
+              data-cy="deleteButtonHead"
+            />
+            <Button
+              text="Удалить из tail"
+              type="button"
+              disabled={
+                dataForVisualization.length === 0 || currentAnimation !== null
+              }
+              isLoader={currentAnimation === "deleteTail"}
+              linkedList="small"
+              onClick={async () => {
+                setCurrentAnimation("deleteTail");
+                setDeletedItem([...linkedList].length - 1);
+                setDataForVisualization([...[...linkedList].slice(0, -1), ""]);
+                setTail(
+                  <Circle
+                    isSmall={true}
+                    letter={[...linkedList].at(-1)}
+                    state={ElementStates.Changing}
+                    extraClass="smallCircle"
+                  />
+                );
+                await delayExecution(SHORT_DELAY_IN_MS);
+                setDeletedItem(null);
+                setTail(null);
+                linkedList.deleteTail();
+                setDataForVisualization([...linkedList]);
+                setCurrentAnimation(null);
+              }}
+              data-cy="deleteButtonTail"
+            />
+          </form>
+          <form
+            className={styles.form}
+            onSubmit={submitAddByIndex}
+            data-cy="formIndex"
+          >
+            <Input
+              extraClass={styles.input}
+              placeholder="Введите индекс"
+              value={inputIndex === -1 ? "" : inputIndex}
+              type="number"
+              step={1}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setInputIndex(+e.target.value); //TODO контролируемый инпут
+              }}
+              data-cy="inputIndex"
+            />
+            <Button
+              text="Добавить по индексу"
+              type="submit"
+              disabled={
+                inputIndex <= -1 ||
+                inputValue === "" ||
+                currentAnimation !== null ||
+                inputIndex > dataForVisualization.length
+              }
+              isLoader={currentAnimation === "addByIndex"}
+              linkedList="big"
+              data-cy="addButtonIndex"
+            />
+            <Button
+              text="Удалить по индексу"
+              type="button"
+              disabled={
+                inputIndex <= -1 ||
+                currentAnimation !== null ||
+                inputIndex > dataForVisualization.length - 1
+              }
+              isLoader={currentAnimation === "deleteByIndex"}
+              linkedList="big"
+              onClick={async () => {
+                setCurrentAnimation("deleteByIndex");
+                const letter = dataForVisualization[inputIndex];
+                setDeleteByIndex(true);
+                for (let i = 0; i <= inputIndex; i++) {
+                  setDeletedItem(i);
+                  await delayExecution(SHORT_DELAY_IN_MS);
                 }
-                letter={item.item}
-                state={item.state}
+                setDataForVisualization(
+                  dataForVisualization.map((i, index) =>
+                    inputIndex === index ? "" : i
+                  )
+                );
+                setDeletedItem(null);
+                setTail(
+                  <Circle
+                    isSmall={true}
+                    letter={letter}
+                    state={ElementStates.Changing}
+                    extraClass="smallCircle"
+                  />
+                );
+                await delayExecution(SHORT_DELAY_IN_MS);
+                setTail(null);
+                linkedList.deleteByIndex(inputIndex);
+                setDataForVisualization([...linkedList]);
+                setInputIndex(-1);
+                setDeleteByIndex(false);
+                setCurrentAnimation(null);
+              }}
+              data-cy="deleteButtonIndex"
+            />
+          </form>
+        </div>
+        <div className={styles.circle}>
+          {dataForVisualization.map((value, index) => (
+            <div key={index} className={styles.circleBlock} data-cy="circle">
+              <Circle
+                letter={value.toString()}
+                index={index}
+                head={index === insertItem ? head : index === 0 ? "head" : null}
+                tail={
+                  index === inputIndex || index === deletedItem
+                    ? tail
+                    : index === lastIndexDataForVisualization
+                    ? "tail"
+                    : null
+                }
+                state={getState(index)}
+                extraClass="bigCircle"
               />
-              {arrayWithState.length - 1 !== index && (
-                <ArrowIcon fill={ElementColors.Default} />
-              )}
-            </li>
+              {lastIndexDataForVisualization !== index && <ArrowIcon />}
+            </div>
           ))}
-        </ul>
-      </form>
+        </div>
     </SolutionLayout>
   );
 };

@@ -1,46 +1,32 @@
-.form {
-  display: grid;
-  justify-content: center;
-  row-gap: 38px;
+.contentBox {
+  padding-bottom: 150px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
 }
 
-.container {
+.form {
   display: flex;
+  max-width: 952px;
+  margin: auto;
   gap: 12px;
+}
+
+.circle {
+  display: flex;
+  max-width: 944px;
+  margin: auto;
+  justify-content: center;
+  gap: 25px;
+}
+
+.circleBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
 }
 
 .input {
-  max-width: 204px;
-}
-
-.list {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  list-style: none;
-  margin: 70px 0 0;
-  padding: 0;
-}
-
-.list__item {
-  position: relative;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.small__top {
-  position: absolute;
-  top: -70px;
-  left: 10px;
-}
-
-.small__bottom {
-  position: absolute;
-  top: 120px;
-  left: 10px;
-}
-
-.btn {
-  flex: 1;
+  width: 204px;
 }
