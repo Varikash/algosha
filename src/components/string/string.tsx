@@ -7,12 +7,8 @@ import { Circle } from "../ui/circle/circle";
 import { delayExecution } from "../../constants/utils";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
-
-type StringElement = {
-  value: string;
-  state: ElementStates;
-}
-
+import { StringElement } from "../../types/types";
+import { swapStrings } from "./utils";
 
 export const StringComponent: React.FC = () => {
 
@@ -21,61 +17,24 @@ export const StringComponent: React.FC = () => {
   const [calmState, setState] = useState<boolean>(true);
   const [isLoading, setLoading] = useState<boolean>(false);
   
-
-  const swap = (arr: StringElement[], firstIndex: number, secondIndex: number) => {
-    [arr[firstIndex], arr[secondIndex]] = [arr[secondIndex], arr[firstIndex]];
-  };
-  
-  const swapStrings = async (arr: StringElement[]) => {
-    setLoading(true);
-    let length = arr.length - 1;
-    let half = Math.floor(length / 2);
-  
-    for (let head = 0, tail = length; head < tail; head++, tail--) {
-
-      arr[head].state = ElementStates.Changing;
-      arr[tail].state = ElementStates.Changing;
-      setArray([...arr]);
-  
-      await delayExecution(DELAY_IN_MS);
-  
-
-      swap(arr, head, tail);
-  
-
-      arr[head].state = ElementStates.Modified;
-      arr[tail].state = ElementStates.Modified;
-      setArray([...arr]);
-  
-      await delayExecution(DELAY_IN_MS);
-    }
-  
-    if (arr.length % 2 !== 0) {
-      arr[half].state = ElementStates.Modified;
-      setArray([...arr]);
-    }
-
-    setLoading(false);
-    setState(true);
-  };
-  
-
   const handleChage = (event: ChangeEvent<HTMLInputElement>) => {
     setString(event.target.value);
     setState(false);
   }
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     const initialArray = string.split('').map(char => ({
       value: char,
       state: ElementStates.Default
     }));
     setArray(initialArray);
     await delayExecution(DELAY_IN_MS);
-    swapStrings(initialArray);
+    swapStrings(initialArray, setArray, setLoading, setState);
     setString('');
   }
+
 
   return (
     <SolutionLayout title="Строка">

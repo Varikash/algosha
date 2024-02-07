@@ -3,9 +3,8 @@ import Style from './fibonacci-page.module.css'
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
-import { delayExecution } from "../../constants/utils";
-import { DELAY_IN_MS } from "../../constants/delays";
 import { Circle } from "../ui/circle/circle";
+import { generateFibonacciSequence } from "./utils";
 
 export const FibonacciPage: React.FC = () => {
 
@@ -14,26 +13,6 @@ export const FibonacciPage: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [sequenceArray, setSequence] = useState<number[]>([]);
 
-  async function generateFibonacciSequence(n: number): Promise<number[]> {
-    if (n <= 0) {
-      return [];
-    }
-    let sequence = [1];
-    setSequence([...sequence])
-    if (n > 1) {
-      await delayExecution(DELAY_IN_MS)
-      sequence.push(1);
-      setSequence([...sequence])
-    }
-    for (let i = 2; i <= n; i++) {
-      await delayExecution(DELAY_IN_MS)
-      sequence.push(sequence[i - 1] + sequence[i - 2]);
-      setSequence([...sequence])
-    }
-    setLoading(false);
-    setInputValue(undefined);
-    return sequence;
-  }
 
   const handleChage = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(parseInt(event.target.value));
@@ -42,7 +21,7 @@ export const FibonacciPage: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
-    generateFibonacciSequence(inputValue!)
+    generateFibonacciSequence(inputValue!, setSequence, setLoading, setInputValue)
   }
 
   useEffect(() => {
