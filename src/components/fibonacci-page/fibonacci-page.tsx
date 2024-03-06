@@ -52,7 +52,7 @@ export const FibonacciPage: React.FC = () => {
             onChange={handleChage} 
             value={inputValue === 0 ? "" : inputValue} 
             placeholder='Введите число'/>
-          <Button extraClass={Style.buttonInput} text="Развернуть" type="submit" disabled={calmState} isLoader={isLoading}/>
+          <Button extraClass={Style.buttonInput} text="Развернуть" type="submit" disabled={calmState} isLoader={isLoading} data-cy="button"/>
         </form>
         <div className={Style.circleContainer}>
           {sequenceArray.map((element, index)=>(
