@@ -94,6 +94,7 @@ export const StackPage: React.FC = () => {
               type="submit"
               disabled={!inputValue || isActive}
               isLoader={isPushing}
+              data-cy="button-add"
             />
             <Button 
               text='Удалить'
@@ -101,6 +102,7 @@ export const StackPage: React.FC = () => {
               onClick={handleRemoveButton}
               disabled={!array.length || isActive}
               isLoader={isPopping}
+              data-cy="button-delete"
             />
           </div>
           <Button 
@@ -109,6 +111,7 @@ export const StackPage: React.FC = () => {
             onClick={handleClearButton}
             disabled={!array.length || isActive}
             isLoader={isResetting}
+            data-cy="button-clear"
           />
         </form>
         <div>
