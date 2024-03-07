@@ -98,12 +98,14 @@ export const QueuePage: React.FC = () => {
             type={"submit"}
             disabled={!inputValue || isActiveState || quenue.getLength() >= 7}
             isLoader={isEnqueue}
+            data-cy="button-add"
           />
           <Button
             text="Удалить"
             onClick={handleRemoveButton}
             disabled={quenue.isEmpty() || isActiveState}
             isLoader={isDequeue}
+            data-cy="button-delete"
           />
         </div>
         <Button
@@ -111,6 +113,7 @@ export const QueuePage: React.FC = () => {
           onClick={handleClearButton}
           disabled={quenue.isEmpty() || isActiveState}
           isLoader={isPurge}
+          data-cy="button-clear"
         />
       </form>
       <ul className={Style.list}>
