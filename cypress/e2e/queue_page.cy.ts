@@ -43,4 +43,20 @@ describe("The Queue Page", () => {
     }
   });
 
+  it('Очистка очереди выполняется корректно', () => {
+    for (let i = 0; i < 7; i++) {
+      cy.get('input').type(`${i}`);
+      cy.get('[data-cy="button-add"]').should("be.enabled");
+      cy.get('[data-cy="button-add"]').click();
+      cy.get(Selectors.letter).eq(i).should("have.text", `${i}`);
+    }
+
+    cy.get('[data-cy="button-clear"]').should('be.enabled').click();
+
+    for (let i = 0; i < 7; i++) {
+      cy.get(Selectors.letter).eq(i).should("have.text", "");
+    }
+
+  })
+
 })
