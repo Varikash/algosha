@@ -11,7 +11,7 @@ describe("The Stack Page", () => {
     cy.get('[data-cy="button-add"]').should('be.disabled');
     cy.get('[data-cy="button-delete"]').should('be.disabled');
     cy.get('[data-cy="button-clear"]').should('be.disabled');
-  })
+  });
 
   it('Элементы добавляются в стэк и анимация работает', () => {
     for (let i = 0; i < 4; i++) {
