@@ -1,0 +1,356 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Circle component Рендерит circle без буквы 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle в состоянии changing 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   changing"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle в состоянии default 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle в состоянии modified 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   modified"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle с head 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head string"
+    data-cy="head"
+  >
+    head
+  </div>
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle с index 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  >
+    7
+  </p>
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail60 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle с react-элементом в head 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  >
+    <div
+      className="content "
+    >
+      <div
+        className="text text_type_input text_color_input mb-4 absolute head element"
+        data-cy="head"
+      />
+      <div
+        className="circle  small default"
+        data-cy="circleStyle"
+      >
+        <p
+          className="text text_type_circle text_color_input letter"
+          data-cy="letter"
+        />
+      </div>
+      <p
+        className="text text_type_input text_color_input mt-4 absolute index"
+      />
+      <div
+        className="text text_type_input text_color_input mt-4 absolute tail30 element"
+        data-cy="tail"
+      />
+    </div>
+  </div>
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle с react-элементом в tail 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  >
+    <div
+      className="content "
+    >
+      <div
+        className="text text_type_input text_color_input mb-4 absolute head element"
+        data-cy="head"
+      />
+      <div
+        className="circle  small default"
+        data-cy="circleStyle"
+      >
+        <p
+          className="text text_type_circle text_color_input letter"
+          data-cy="letter"
+        />
+      </div>
+      <p
+        className="text text_type_input text_color_input mt-4 absolute index"
+      />
+      <div
+        className="text text_type_input text_color_input mt-4 absolute tail30 element"
+        data-cy="tail"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Circle component Рендерит circle с tail 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 string"
+    data-cy="tail"
+  >
+    tail
+  </div>
+</div>
+`;
+
+exports[`Circle component Рендерит circle с буквой 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle   default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    >
+      J
+    </p>
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;
+
+exports[`Circle component Рендерит circle с пропом isSmall ===  true 1`] = `
+<div
+  className="content "
+>
+  <div
+    className="text text_type_input text_color_input mb-4 absolute head element"
+    data-cy="head"
+  />
+  <div
+    className="circle  small default"
+    data-cy="circleStyle"
+  >
+    <p
+      className="text text_type_circle text_color_input letter"
+      data-cy="letter"
+    />
+  </div>
+  <p
+    className="text text_type_input text_color_input mt-4 absolute index"
+  />
+  <div
+    className="text text_type_input text_color_input mt-4 absolute tail30 element"
+    data-cy="tail"
+  />
+</div>
+`;

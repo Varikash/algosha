@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reverse string even string length 1`] = `
+Array [
+  Object {
+    "state": "modified",
+    "value": "r",
+  },
+  Object {
+    "state": "modified",
+    "value": "e",
+  },
+  Object {
+    "state": "modified",
+    "value": "t",
+  },
+  Object {
+    "state": "modified",
+    "value": "n",
+  },
+  Object {
+    "state": "modified",
+    "value": "i",
+  },
+  Object {
+    "state": "modified",
+    "value": "w",
+  },
+]
+`;
+
+exports[`reverse string odd string length 1`] = `
+Array [
+  Object {
+    "state": "modified",
+    "value": "е",
+  },
+  Object {
+    "state": "modified",
+    "value": "т",
+  },
+  Object {
+    "state": "modified",
+    "value": "и",
+  },
+  Object {
+    "state": "modified",
+    "value": "с",
+  },
+  Object {
+    "state": "modified",
+    "value": "а",
+  },
+  Object {
+    "state": "modified",
+    "value": "п",
+  },
+  Object {
+    "state": "modified",
+    "value": "с",
+  },
+]
+`;
+
+exports[`reverse string one char 1`] = `
+Array [
+  Object {
+    "state": "modified",
+    "value": "ы",
+  },
+]
+`;

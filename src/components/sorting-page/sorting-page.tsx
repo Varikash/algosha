@@ -14,7 +14,7 @@ enum SortMethod {
   Bubble = "BUBBLE",
 }
 
-interface ArrayElement {
+export interface ArrayElement {
   value: number;
   state: ElementStates;
 }
@@ -34,7 +34,7 @@ const compareArrayItems = (direction: Direction, firstValue: number, secondValue
   return direction === Direction.Ascending ? firstValue > secondValue : firstValue < secondValue;
 };
 
-const bubbleSort = async (array: ArrayElement[], direction: Direction, setArrayForRender: React.Dispatch<React.SetStateAction<ArrayElement[]>>): Promise<void> => {
+export const bubbleSort = async (array: ArrayElement[], direction: Direction, setArrayForRender: React.Dispatch<React.SetStateAction<ArrayElement[]>>): Promise<void> => {
   let n = array.length;
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n - i - 1; j++) {
@@ -55,7 +55,7 @@ const bubbleSort = async (array: ArrayElement[], direction: Direction, setArrayF
   }
 };
 
-const selectionSort = async (
+export const selectionSort = async (
   array: ArrayElement[],
   direction: Direction,
   setArrayForRender: React.Dispatch<React.SetStateAction<ArrayElement[]>>

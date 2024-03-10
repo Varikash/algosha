@@ -41,7 +41,7 @@ export const StringComponent: React.FC = () => {
       <section className={Style.contentBox}>
         <form onSubmit={handleSubmit} className={Style.inputContainer}>
         <Input type="text" maxLength={11} isLimitText={true} extraClass={Style.stringInput} onChange={handleChage} value={string}/>
-        <Button extraClass={Style.buttonInput} text="Развернуть" type="submit" disabled={calmState} isLoader={isLoading}/>
+        <Button extraClass={Style.buttonInput} text="Развернуть" type="submit" disabled={calmState} isLoader={isLoading} data-cy="button"/>
         </form>
         <div className={Style.circleContainer}>
         {stringArray.map((element, index) => (

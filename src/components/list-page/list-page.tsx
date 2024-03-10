@@ -8,7 +8,7 @@ import { delayExecution } from "../../constants/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
-import { LinkedList } from "./LinkedList"
+import { LinkedList } from "./linkedList"
 
 export const randomArr = (min: number, max: number, maxNumber: number) => {
   const randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
@@ -132,7 +132,7 @@ export const ListPage: React.FC = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setInputValue(e.target.value);
               }}
-              data-cy="inputValue"
+              data-cy="input-value"
             />
             <Button
               text="Добавить в head"
@@ -140,7 +140,7 @@ export const ListPage: React.FC = () => {
               disabled={inputValue === "" || currentAnimation !== null}
               linkedList="small"
               isLoader={currentAnimation === "prepend"}
-              data-cy="addButtonHead"
+              data-cy="button-addToHead"
             />
             <Button
               text="Добавить в tail"
@@ -169,7 +169,7 @@ export const ListPage: React.FC = () => {
                 setInputValue("");
                 setCurrentAnimation(null);
               }}
-              data-cy="addButtonTail"
+              data-cy="button-addToTail"
             />
             <Button
               text="Удалить из head"
@@ -198,7 +198,7 @@ export const ListPage: React.FC = () => {
                 setDataForVisualization([...linkedList]);
                 setCurrentAnimation(null);
               }}
-              data-cy="deleteButtonHead"
+              data-cy="button-deleteFromHead"
             />
             <Button
               text="Удалить из tail"
@@ -227,13 +227,12 @@ export const ListPage: React.FC = () => {
                 setDataForVisualization([...linkedList]);
                 setCurrentAnimation(null);
               }}
-              data-cy="deleteButtonTail"
+              data-cy="button-deleteFromTail"
             />
           </form>
           <form
             className={styles.form}
             onSubmit={submitAddByIndex}
-            data-cy="formIndex"
           >
             <Input
               extraClass={styles.input}
@@ -244,7 +243,7 @@ export const ListPage: React.FC = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setInputIndex(+e.target.value); //TODO контролируемый инпут
               }}
-              data-cy="inputIndex"
+              data-cy="input-index"
             />
             <Button
               text="Добавить по индексу"
@@ -257,7 +256,7 @@ export const ListPage: React.FC = () => {
               }
               isLoader={currentAnimation === "addByIndex"}
               linkedList="big"
-              data-cy="addButtonIndex"
+              data-cy="button-addByIndex"
             />
             <Button
               text="Удалить по индексу"
@@ -299,7 +298,7 @@ export const ListPage: React.FC = () => {
                 setDeleteByIndex(false);
                 setCurrentAnimation(null);
               }}
-              data-cy="deleteButtonIndex"
+              data-cy="button-deleteByIndex"
             />
           </form>
         </div>
