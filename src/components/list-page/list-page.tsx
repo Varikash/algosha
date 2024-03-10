@@ -8,7 +8,7 @@ import { delayExecution } from "../../constants/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
-import { LinkedList } from "./LinkedList"
+import { LinkedList } from "./linkedList"
 
 export const randomArr = (min: number, max: number, maxNumber: number) => {
   const randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
